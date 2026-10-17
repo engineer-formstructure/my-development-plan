@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MeDevelopmentIndexRouteImport } from './routes/me.development.index'
+import { Route as MeDevelopmentGoalIdRouteImport } from './routes/me.development.$goalId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeDevelopmentIndexRoute = MeDevelopmentIndexRouteImport.update({
+  id: '/me/development/',
+  path: '/me/development/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeDevelopmentGoalIdRoute = MeDevelopmentGoalIdRouteImport.update({
+  id: '/me/development/$goalId',
+  path: '/me/development/$goalId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/me/development/$goalId': typeof MeDevelopmentGoalIdRoute
+  '/me/development/': typeof MeDevelopmentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/me/development/$goalId': typeof MeDevelopmentGoalIdRoute
+  '/me/development': typeof MeDevelopmentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/me/development/$goalId': typeof MeDevelopmentGoalIdRoute
+  '/me/development/': typeof MeDevelopmentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/me/development/$goalId' | '/me/development/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/me/development/$goalId' | '/me/development'
+  id: '__root__' | '/' | '/me/development/$goalId' | '/me/development/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MeDevelopmentGoalIdRoute: typeof MeDevelopmentGoalIdRoute
+  MeDevelopmentIndexRoute: typeof MeDevelopmentIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/me/development/': {
+      id: '/me/development/'
+      path: '/me/development'
+      fullPath: '/me/development/'
+      preLoaderRoute: typeof MeDevelopmentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/me/development/$goalId': {
+      id: '/me/development/$goalId'
+      path: '/me/development/$goalId'
+      fullPath: '/me/development/$goalId'
+      preLoaderRoute: typeof MeDevelopmentGoalIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MeDevelopmentGoalIdRoute: MeDevelopmentGoalIdRoute,
+  MeDevelopmentIndexRoute: MeDevelopmentIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
