@@ -32,7 +32,7 @@ export function GoalPlanBody({ goal, compact }: { goal: DevGoal; compact?: boole
   );
 }
 
-export function ActionPlan({ goal, readOnly }: { goal: DevGoal; readOnly?: boolean }) {
+export function ActionPlan({ goal, readOnly }: { goal: DevGoal; readOnly?: boolean | undefined }) {
   const { updateAction, role } = useDev();
   const locked = goal.status === "completed";
   return (
@@ -79,7 +79,7 @@ export function ActionPlan({ goal, readOnly }: { goal: DevGoal; readOnly?: boole
 
 const NEXT: Record<CriterionStatus, CriterionStatus> = { not_started: "in_progress", in_progress: "achieved", achieved: "not_started" };
 
-export function SuccessCriteria({ goal, readOnly }: { goal: DevGoal; readOnly?: boolean }) {
+export function SuccessCriteria({ goal, readOnly }: { goal: DevGoal; readOnly?: boolean | undefined }) {
   const { setCriterion, role } = useDev();
   const editable = !readOnly && role === "manager" && goal.status !== "completed";
   return (

@@ -150,7 +150,7 @@ export function LearningCurve() {
                   strokeWidth={2}
                   isAnimationActive
                   dot={(props: { cx?: number; cy?: number; index?: number }) => {
-                    const pt = points[props.index ?? 0];
+                    const pt = points[props.index ?? 0]!;
                     const on = active?.id === pt.id;
                     return (
                       <circle key={pt.id} cx={props.cx} cy={props.cy} r={on ? 7 : 5} fill={on ? "var(--color-primary)" : "var(--color-surface)"} stroke="var(--color-primary)" strokeWidth={2} style={{ cursor: "pointer" }} onClick={() => setPicked(pt ?? null)} />
