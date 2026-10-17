@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MeDevelopmentRouteImport } from './routes/me.development'
 import { Route as MeDevelopmentIndexRouteImport } from './routes/me.development.index'
 import { Route as MeDevelopmentGoalIdRouteImport } from './routes/me.development.$goalId'
 
@@ -18,19 +19,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MeDevelopmentIndexRoute = MeDevelopmentIndexRouteImport.update({
-  id: '/me/development/',
-  path: '/me/development/',
+const MeDevelopmentRoute = MeDevelopmentRouteImport.update({
+  id: '/me/development',
+  path: '/me/development',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeDevelopmentIndexRoute = MeDevelopmentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MeDevelopmentRoute,
+} as any)
 const MeDevelopmentGoalIdRoute = MeDevelopmentGoalIdRouteImport.update({
-  id: '/me/development/$goalId',
-  path: '/me/development/$goalId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$goalId',
+  path: '/$goalId',
+  getParentRoute: () => MeDevelopmentRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/me/development': typeof MeDevelopmentRouteWithChildren
   '/me/development/$goalId': typeof MeDevelopmentGoalIdRoute
   '/me/development/': typeof MeDevelopmentIndexRoute
 }
@@ -42,21 +49,27 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/me/development': typeof MeDevelopmentRouteWithChildren
   '/me/development/$goalId': typeof MeDevelopmentGoalIdRoute
   '/me/development/': typeof MeDevelopmentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/me/development/$goalId' | '/me/development/'
+  fullPaths:
+    '/' | '/me/development' | '/me/development/$goalId' | '/me/development/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/me/development/$goalId' | '/me/development'
-  id: '__root__' | '/' | '/me/development/$goalId' | '/me/development/'
+  id:
+    | '__root__'
+    | '/'
+    | '/me/development'
+    | '/me/development/$goalId'
+    | '/me/development/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MeDevelopmentGoalIdRoute: typeof MeDevelopmentGoalIdRoute
-  MeDevelopmentIndexRoute: typeof MeDevelopmentIndexRoute
+  MeDevelopmentRoute: typeof MeDevelopmentRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -68,27 +81,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/me/development': {
+      id: '/me/development'
+      path: '/me/development'
+      fullPath: '/me/development'
+      preLoaderRoute: typeof MeDevelopmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/me/development/': {
       id: '/me/development/'
-      path: '/me/development'
+      path: '/'
       fullPath: '/me/development/'
       preLoaderRoute: typeof MeDevelopmentIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MeDevelopmentRoute
     }
     '/me/development/$goalId': {
       id: '/me/development/$goalId'
-      path: '/me/development/$goalId'
+      path: '/$goalId'
       fullPath: '/me/development/$goalId'
       preLoaderRoute: typeof MeDevelopmentGoalIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MeDevelopmentRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+interface MeDevelopmentRouteChildren {
+  MeDevelopmentGoalIdRoute: typeof MeDevelopmentGoalIdRoute
+  MeDevelopmentIndexRoute: typeof MeDevelopmentIndexRoute
+}
+
+const MeDevelopmentRouteChildren: MeDevelopmentRouteChildren = {
   MeDevelopmentGoalIdRoute: MeDevelopmentGoalIdRoute,
   MeDevelopmentIndexRoute: MeDevelopmentIndexRoute,
+}
+
+const MeDevelopmentRouteWithChildren = MeDevelopmentRoute._addFileChildren(
+  MeDevelopmentRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  MeDevelopmentRoute: MeDevelopmentRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
