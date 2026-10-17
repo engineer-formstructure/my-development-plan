@@ -69,11 +69,11 @@ export interface DevAction {
   title: string;
   type: ActionType;
   owner: string;
-  target?: string;
-  frequency?: string;
-  progressCurrent?: number;
-  progressTotal?: number;
-  due?: string;
+  target?: string | undefined;
+  frequency?: string | undefined;
+  progressCurrent?: number | undefined;
+  progressTotal?: number | undefined;
+  due?: string | undefined;
   done: boolean;
 }
 
@@ -87,27 +87,27 @@ export interface CheckIn {
   id: string;
   date: string;
   type: string;
-  summary?: string;
-  agreedFocus?: string;
-  observation?: string;
-  employeeReflection?: string;
-  managerFeedback?: string;
-  agreedNextStep?: string;
-  relatedProject?: string;
+  summary?: string | undefined;
+  agreedFocus?: string | undefined;
+  observation?: string | undefined;
+  employeeReflection?: string | undefined;
+  managerFeedback?: string | undefined;
+  agreedNextStep?: string | undefined;
+  relatedProject?: string | undefined;
   createdBy: string;
-  upcoming?: boolean;
+  upcoming?: boolean | undefined;
 }
 
 export interface Evidence {
   id: string;
-  checkinId?: string;
+  checkinId?: string | undefined;
   type: EvidenceType;
   title: string;
   date: string;
-  role?: string;
-  description?: string;
-  project?: string;
-  attachmentName?: string;
+  role?: string | undefined;
+  description?: string | undefined;
+  project?: string | undefined;
+  attachmentName?: string | undefined;
   createdBy: string;
 }
 
@@ -135,19 +135,19 @@ export interface DevGoal {
   startLevel: Level;
   currentLevel: Level; // only changed by a confirmed assessment
   targetLevel: Level;
-  careerCompetency?: { role: string; competency: string };
+  careerCompetency?: { role: string; competency: string } | undefined;
   status: GoalStatus;
-  proposed?: boolean;
+  proposed?: boolean | undefined;
   startDate: string;
   targetDate: string;
-  nextReviewDate?: string;
-  completedAt?: string;
-  reviewFrequency?: string;
-  evidenceRequired?: string;
-  milestones?: string[];
-  finalOutcome?: "Achieved" | "Partially achieved" | "Closed";
-  finalComment?: string;
-  afterState?: string;
+  nextReviewDate?: string | undefined;
+  completedAt?: string | undefined;
+  reviewFrequency?: string | undefined;
+  evidenceRequired?: string | undefined;
+  milestones?: string[] | undefined;
+  finalOutcome?: "Achieved" | "Partially achieved" | "Closed" | undefined;
+  finalComment?: string | undefined;
+  afterState?: string | undefined;
   actions: DevAction[];
   criteria: Criterion[];
   checkins: CheckIn[];
@@ -159,14 +159,14 @@ export interface Assessment {
   id: string;
   employeeId: string;
   competency: string;
-  goalId?: string;
+  goalId?: string | undefined;
   level: Level;
   date: string;
   type: string;
   confirmedBy: string;
-  comment?: string;
-  reflection?: string;
-  evidence?: string;
+  comment?: string | undefined;
+  reflection?: string | undefined;
+  evidence?: string | undefined;
 }
 
 export interface Employee {
